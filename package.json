@@ -1,0 +1,19 @@
+{
+  "name": "webtask-crud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run create -- -w",
+    "create": "wt create --secrets-file .env index -b"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "mongoose": "^4.9.8",
+    "webtask-tools": "^3.2.0"
+  }
+}
