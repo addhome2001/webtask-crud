@@ -1,9 +1,7 @@
-const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 
 module.exports = app => {
-  app.use('/todos', router);
 
   router.get('/', (req, res, next) => {
     req.todoModel
@@ -86,4 +84,6 @@ module.exports = app => {
       return next();
     }
   });
+
+  app.use('/todos', router);
 };
