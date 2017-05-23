@@ -13,18 +13,23 @@ module.exports = app => {
         });
     })
     .post((req, res) => {
-      const newTodo = new req.todoModel(
-        Object.assign({}, req.body, {
+      const { content = {} } = req.body || {};
+
+      if (content && content.length > 0) {
+        const newTodo = new req.todoModel({
+          content,
           checked: false,
           created_at: Date.now(),
-        }),
-      );
+        });
 
-      newTodo.save((err, savedTodo) => {
-        if (err) return next();
+        newTodo.save((err, savedTodo) => {
+          if (err) return next();
 
-        res.json(savedTodo);
-      });
+          res.json(savedTodo);
+        });
+      } else {
+        return next();
+      }
     })
     .delete((req, res) => {
       req.todoModel.remove(
@@ -39,29 +44,41 @@ module.exports = app => {
 
   app.route('/todos/:id')
     .put((req, res) => {
-      const idParam = req.params.id;
+      const { id } = req.params || {};
+      const { checked, content } = req.body || {};
 
-      req.todoModel.findOneAndUpdate(
-        { _id: idParam },
-        req.body,
-        { new: true },
-        (err, newTodo) => {
-          if (err) return next();
+      if (id) {
+        req.todoModel.findOneAndUpdate(
+          { _id: id },
+          Object.assign({},
+            checked !== undefined && { checked },
+            content !== undefined && { content },
+          ),
+          { new: true },
+          (err, newTodo) => {
+            if (err) return next();
 
-          res.json(newTodo);
-        },
-      );
+            res.json(newTodo);
+          },
+        );
+      } else {
+        return next();
+      }
     })
     .delete((req, res) => {
-      const idParam = req.params.id;
+      const { id } = req.params || {};
 
-      req.todoModel.findByIdAndRemove(
-        idParam,
-        (err, removedTodo) => {
-          if (err) return next();
+      if (id) {
+        req.todoModel.findByIdAndRemove(
+          id,
+          (err, removedTodo) => {
+            if (err) return next();
 
-          res.json(removedTodo);
-        },
-      );
+            res.json(removedTodo);
+          },
+        );
+      } else {
+        return next();
+      }
     });
 };
