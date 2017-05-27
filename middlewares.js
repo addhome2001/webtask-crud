@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
-const TodoSchema = require('./models/Todo');
 
 module.exports.db = (req, res, next) => {
-  const db = mongoose.createConnection(req.webtaskContext.secrets.MONGO_URL);
-  req.todoModel = db.model('Todo', TodoSchema);
+  mongoose.connect(req.webtaskContext.secrets.MONGO_URL);
   req.on('close', () => {
     db.connection.close();
   });
