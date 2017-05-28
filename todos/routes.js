@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
   }
 });
 
-router.delete('/all', (req, res) => {
+router.delete('/checked', (req, res) => {
   Todos.removeAllTodos(err => {
     if (err) return next();
 
